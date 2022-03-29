@@ -323,37 +323,37 @@ def click_back(page):
         page.close()
 
 
-def main():
-    for p in prods:
-        main_page = login(URL, CRED.get("username"), CRED.get("password"), p)
-        select_prod(main_page, p)
-        time.sleep(r_time)
-        overview_page = get_overview_page(main_page, URL)
-        time.sleep(r_time)
-        overview_page = switch_frame(overview_page)
-        balance_group_selector = get_balance_groups(overview_page)
-        balance_group_names = get_balance_groups_names(balance_group_selector)
+def main(p):
+    main_page = login(URL, CRED.get("username"), CRED.get("password"), p)
+    select_prod(main_page, p)
+    time.sleep(r_time)
+    overview_page = get_overview_page(main_page, URL)
+    time.sleep(r_time)
+    overview_page = switch_frame(overview_page)
+    balance_group_selector = get_balance_groups(overview_page)
+    balance_group_names = get_balance_groups_names(balance_group_selector)
 
-        for group in balance_group_names:
-            select_balance_group(balance_group_selector, group)
-            date = create_date_header(parse_date_str(DATE))
-            select_day(overview_page, date.get("day"))
-            select_month(overview_page, date.get("month"))
-            select_year(overview_page, date.get("year"))
-            click_filter_button(overview_page)
-            overview_page = click_choices_button(overview_page)
-            overview_page = click_expand_group_button(overview_page)
-            click_download_button(overview_page)
-            click_back(overview_page)
-            time.sleep(r_time)
-            balance_group_selector = get_balance_groups(overview_page)
-        overview_page.close()
-        main_page.close()
+    for group in balance_group_names:
+        select_balance_group(balance_group_selector, group)
+        date = create_date_header(parse_date_str(DATE))
+        select_day(overview_page, date.get("day"))
+        select_month(overview_page, date.get("month"))
+        select_year(overview_page, date.get("year"))
+        click_filter_button(overview_page)
+        overview_page = click_choices_button(overview_page)
+        overview_page = click_expand_group_button(overview_page)
+        click_download_button(overview_page)
+        click_back(overview_page)
+        time.sleep(r_time)
+        balance_group_selector = get_balance_groups(overview_page)
+    overview_page.close()
+    main_page.close()
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except Exception:
-        time.sleep(10)
-        main()
+    for p in prods:
+        try:
+            main(p)
+        except Exception:
+            time.sleep(10)
+            main(p)
